@@ -8,3 +8,5 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+// Time spent on part 2a: 3 hours

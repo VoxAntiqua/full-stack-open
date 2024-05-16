@@ -7,3 +7,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <App />
   </React.StrictMode>
 );
+
+// Time spent on part 2b: 5 hours

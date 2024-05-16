@@ -3,11 +3,18 @@ import Persons from "./components/Persons";
 import PersonForm from "./components/PersonForm";
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [persons, setPersons] = useState([
+    { name: "Arto Hellas", number: "040-1234567" },
+  ]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
+  };
+
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
   };
 
   const addName = (event) => {
@@ -18,10 +25,12 @@ const App = () => {
     } else {
       const personObject = {
         name: newName,
+        number: newNumber,
       };
       setPersons(persons.concat(personObject));
-      console.log(persons);
       setNewName("");
+      setNewNumber("");
+      console.log(newNumber);
     }
   };
 
@@ -32,6 +41,8 @@ const App = () => {
         addName={addName}
         newName={newName}
         handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        newNumber={newNumber}
       />
       <h2>Numbers</h2>
       <Persons persons={persons} />

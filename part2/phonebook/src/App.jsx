@@ -12,6 +12,7 @@ const App = () => {
 
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -39,9 +40,26 @@ const App = () => {
     }
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredPersons = persons.filter((p) =>
+    p.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        filter shown with{" "}
+        <input
+          name="search-query-input"
+          value={searchQuery}
+          onChange={handleSearchChange}
+        ></input>
+      </div>
+      <h3>Add a new</h3>
       <PersonForm
         addName={addName}
         newName={newName}
@@ -49,8 +67,8 @@ const App = () => {
         handleNumberChange={handleNumberChange}
         newNumber={newNumber}
       />
-      <h2>Numbers</h2>
-      <Persons persons={persons} />
+      <h3>Numbers</h3>
+      <Persons persons={filteredPersons} />
     </div>
   );
 };

@@ -9,3 +9,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 );
 
 // Time spent on part 2b: 5 hours
+// TIme spent on part 2c: 4 hours

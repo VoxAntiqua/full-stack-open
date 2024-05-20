@@ -23,6 +23,10 @@ const App = () => {
     setNewNumber(event.target.value);
   };
 
+  const handleRemove = () => {
+    console.log("button clicked");
+  };
+
   const addName = (event) => {
     event.preventDefault();
     console.log(persons.some((p) => p.name === newName));
@@ -66,7 +70,7 @@ const App = () => {
         newNumber={newNumber}
       />
       <h3>Numbers</h3>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} handleRemove={handleRemove} />
     </div>
   );
 };

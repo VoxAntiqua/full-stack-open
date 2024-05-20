@@ -23,10 +23,12 @@ const App = () => {
     setNewNumber(event.target.value);
   };
 
-  const handleRemove = (id) => {
-    personService
-      .remove(id)
-      .then(setPersons(persons.filter((p) => p.id !== id)));
+  const handleRemove = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService
+        .remove(person.id)
+        .then(setPersons(persons.filter((p) => p.id !== person.id)));
+    }
   };
 
   const addName = (event) => {

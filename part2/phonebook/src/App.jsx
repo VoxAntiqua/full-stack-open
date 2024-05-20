@@ -23,13 +23,14 @@ const App = () => {
     setNewNumber(event.target.value);
   };
 
-  const handleRemove = () => {
-    console.log("button clicked");
+  const handleRemove = (id) => {
+    personService
+      .remove(id)
+      .then(setPersons(persons.filter((p) => p.id !== id)));
   };
 
   const addName = (event) => {
     event.preventDefault();
-    console.log(persons.some((p) => p.name === newName));
     if (persons.some((p) => p.name === newName)) {
       alert(`${newName} is already added to phonebook`);
     } else {
@@ -42,7 +43,6 @@ const App = () => {
         setNewName("");
         setNewNumber("");
       });
-      console.log(newNumber);
     }
   };
 

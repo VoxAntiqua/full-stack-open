@@ -33,13 +33,31 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault();
-    if (persons.some((p) => p.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+    const personObject = {
+      name: newName,
+      number: newNumber,
+    };
+    // Check if name exists in phonebook
+    const personToUpdate = persons.find((p) => p.name === newName);
+    if (personToUpdate !== undefined) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        // id stays the same between updates
+        personObject.id = personToUpdate.id;
+        personService.update(personToUpdate.id, personObject).then(() => {
+          setPersons(
+            Object.assign([], persons, {
+              [persons.indexOf(personToUpdate)]: personObject,
+            })
+          );
+          setNewName("");
+          setNewNumber("");
+        });
+      }
     } else {
-      const personObject = {
-        name: newName,
-        number: newNumber,
-      };
       personService.create(personObject).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
         setNewName("");

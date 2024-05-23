@@ -28,9 +28,14 @@ const App = () => {
 
   const handleRemove = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
-      personService
-        .remove(person.id)
-        .then(setPersons(persons.filter((p) => p.id !== person.id)));
+      personService.remove(person.id).then(() => {
+        setPersons(persons.filter((p) => p.id !== person.id));
+        setMessage(`Removed ${person.name}`);
+        setIsError(false);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      });
     }
   };
 
@@ -58,6 +63,11 @@ const App = () => {
           );
           setNewName("");
           setNewNumber("");
+          setMessage(`Updated ${personObject.name}`);
+          setIsError(false);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
         });
       }
     } else {
@@ -65,6 +75,11 @@ const App = () => {
         setPersons(persons.concat(returnedPerson));
         setNewName("");
         setNewNumber("");
+        setMessage(`Added ${returnedPerson.name}`);
+        setIsError(false);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       });
     }
   };

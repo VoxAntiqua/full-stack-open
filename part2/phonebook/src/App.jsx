@@ -6,7 +6,7 @@ import personService from "./services/persons";
 import Notification from "./components/Notification";
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
+  const [persons, setPersons] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => setPersons(initialPersons));
@@ -110,9 +110,11 @@ const App = () => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredPersons = persons.filter((p) =>
-    p.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredPersons = persons
+    ? persons.filter((p) =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : null;
 
   return (
     <div>

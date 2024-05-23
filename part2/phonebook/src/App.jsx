@@ -26,24 +26,27 @@ const App = () => {
     setNewNumber(event.target.value);
   };
 
+  const displayMessage = (message, isError) => {
+    setMessage(message);
+    setIsError(isError);
+    setTimeout(() => {
+      setMessage(null);
+    }, 5000);
+  };
+
   const handleRemove = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
       personService
         .remove(person.id)
         .then(() => {
           setPersons(persons.filter((p) => p.id !== person.id));
-          setMessage(`Removed ${person.name}`);
-          setIsError(false);
-          setTimeout(() => {
-            setMessage(null);
-          }, 5000);
+          displayMessage(`Removed ${person.name}`, false);
         })
         .catch((error) => {
-          setMessage(`${person.name} has already been removed from server`);
-          setIsError(true);
-          setTimeout(() => {
-            setMessage(null);
-          }, 5000);
+          displayMessage(
+            `${person.name} has already been removed from server`,
+            true
+          );
           // local state mismatch with server, so reload data from server
           personService
             .getAll()
@@ -78,22 +81,15 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
-            setMessage(`Updated ${personObject.name}`);
-            setIsError(false);
-            setTimeout(() => {
-              setMessage(null);
-            }, 5000);
+            displayMessage(`Updated ${personObject.name}`, false);
           })
           .catch((error) => {
             setNewName("");
             setNewNumber("");
-            setMessage(
-              `${personObject.name} has already been removed from server`
+            displayMessage(
+              `${personObject.name} has already been removed from server`,
+              true
             );
-            setIsError(true);
-            setTimeout(() => {
-              setMessage(null);
-            }, 5000);
             // local state mismatch with server, so reload data from server
             personService
               .getAll()
@@ -105,11 +101,7 @@ const App = () => {
         setPersons(persons.concat(returnedPerson));
         setNewName("");
         setNewNumber("");
-        setMessage(`Added ${returnedPerson.name}`);
-        setIsError(false);
-        setTimeout(() => {
-          setMessage(null);
-        }, 5000);
+        displayMessage(`Added ${returnedPerson.name}`, false);
       });
     }
   };

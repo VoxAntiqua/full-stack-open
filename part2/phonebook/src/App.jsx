@@ -28,14 +28,27 @@ const App = () => {
 
   const handleRemove = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
-      personService.remove(person.id).then(() => {
-        setPersons(persons.filter((p) => p.id !== person.id));
-        setMessage(`Removed ${person.name}`);
-        setIsError(false);
-        setTimeout(() => {
-          setMessage(null);
-        }, 5000);
-      });
+      personService
+        .remove(person.id)
+        .then(() => {
+          setPersons(persons.filter((p) => p.id !== person.id));
+          setMessage(`Removed ${person.name}`);
+          setIsError(false);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          setMessage(`${person.name} has already been removed from server`);
+          setIsError(true);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+          // local state mismatch with server, so reload data from server
+          personService
+            .getAll()
+            .then((initialPersons) => setPersons(initialPersons));
+        });
     }
   };
 
@@ -55,20 +68,37 @@ const App = () => {
       ) {
         // id stays the same between updates
         personObject.id = personToUpdate.id;
-        personService.update(personToUpdate.id, personObject).then(() => {
-          setPersons(
-            Object.assign([], persons, {
-              [persons.indexOf(personToUpdate)]: personObject,
-            })
-          );
-          setNewName("");
-          setNewNumber("");
-          setMessage(`Updated ${personObject.name}`);
-          setIsError(false);
-          setTimeout(() => {
-            setMessage(null);
-          }, 5000);
-        });
+        personService
+          .update(personToUpdate.id, personObject)
+          .then(() => {
+            setPersons(
+              Object.assign([], persons, {
+                [persons.indexOf(personToUpdate)]: personObject,
+              })
+            );
+            setNewName("");
+            setNewNumber("");
+            setMessage(`Updated ${personObject.name}`);
+            setIsError(false);
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+          })
+          .catch((error) => {
+            setNewName("");
+            setNewNumber("");
+            setMessage(
+              `${personObject.name} has already been removed from server`
+            );
+            setIsError(true);
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+            // local state mismatch with server, so reload data from server
+            personService
+              .getAll()
+              .then((initialPersons) => setPersons(initialPersons));
+          });
       }
     } else {
       personService.create(personObject).then((returnedPerson) => {

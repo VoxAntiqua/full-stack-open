@@ -4,7 +4,7 @@ import Filter from "./components/Filter";
 import Countries from "./components/Countries";
 
 const App = () => {
-  const [countries, setCountries] = useState([]);
+  const [countries, setCountries] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -17,9 +17,11 @@ const App = () => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredCountries = countries.filter((c) =>
-    c.name.common.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredCountries = countries
+    ? countries.filter((c) =>
+        c.name.common.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : null;
 
   return (
     <div>

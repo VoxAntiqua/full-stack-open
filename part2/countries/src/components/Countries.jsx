@@ -14,18 +14,34 @@ const Countries = ({ countries }) => {
   };
 
   useEffect(() => {
-    if (countries.length === 1) {
+    if (countries && countries.length === 1) {
       setCountryToShow(countries[0]);
     } else {
       setCountryToShow(null);
     }
   }, [countries]);
 
-  if (countries.length > 10) {
-    return <div>Too many matches, specify another filter</div>;
-  } else if (countryToShow && countries.length > 1) {
-    return (
-      <div>
+  if (countries) {
+    if (countries.length > 10) {
+      return <div>Too many matches, specify another filter</div>;
+    } else if (countryToShow && countries.length > 1) {
+      return (
+        <div>
+          <ul>
+            {countries.map((c) => (
+              <Country
+                country={c}
+                key={c.cca2}
+                countryToShow={countryToShow}
+                handleShowHide={handleShowHide}
+              />
+            ))}
+          </ul>
+          <CountryData country={countryToShow} />
+        </div>
+      );
+    } else if (!countryToShow && countries.length > 1) {
+      return (
         <ul>
           {countries.map((c) => (
             <Country
@@ -36,24 +52,14 @@ const Countries = ({ countries }) => {
             />
           ))}
         </ul>
-        <CountryData country={countryToShow} />
-      </div>
-    );
-  } else if (!countryToShow && countries.length > 1) {
-    return (
-      <ul>
-        {countries.map((c) => (
-          <Country
-            country={c}
-            key={c.cca2}
-            countryToShow={countryToShow}
-            handleShowHide={handleShowHide}
-          />
-        ))}
-      </ul>
-    );
-  } else if (countryToShow && countries.length === 1) {
-    return <CountryData country={countryToShow} />;
+      );
+    } else if (countryToShow && countries.length === 1) {
+      return <CountryData country={countryToShow} />;
+    } else if (countries.length === 0) {
+      return <div>No matches found</div>;
+    }
+  } else {
+    return <div>Loading...</div>;
   }
 };
 

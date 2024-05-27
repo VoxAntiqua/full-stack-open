@@ -11,7 +11,6 @@ const Countries = ({ countries }) => {
     } else {
       setCountryToShow(country);
     }
-    console.log(country.name.common, "clicked");
   };
 
   useEffect(() => {

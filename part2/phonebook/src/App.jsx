@@ -97,12 +97,17 @@ const App = () => {
           });
       }
     } else {
-      personService.create(personObject).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNewName("");
-        setNewNumber("");
-        displayMessage(`Added ${returnedPerson.name}`, false);
-      });
+      personService
+        .create(personObject)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName("");
+          setNewNumber("");
+          displayMessage(`Added ${returnedPerson.name}`, false);
+        })
+        .catch((error) => {
+          displayMessage(error.response.data.error, true);
+        });
     }
   };
 

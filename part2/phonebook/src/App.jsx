@@ -61,6 +61,7 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
+
     // Check if name exists in phonebook
     const personToUpdate = persons.find((p) => p.name === newName);
     if (personToUpdate !== undefined) {
@@ -73,27 +74,31 @@ const App = () => {
         personObject.id = personToUpdate.id;
         personService
           .update(personToUpdate.id, personObject)
-          .then(() => {
-            setPersons(
-              Object.assign([], persons, {
-                [persons.indexOf(personToUpdate)]: personObject,
-              })
-            );
-            setNewName("");
-            setNewNumber("");
-            displayMessage(`Updated ${personObject.name}`, false);
+          .then((updatedPerson) => {
+            if (updatedPerson) {
+              setPersons(
+                persons.map((person) =>
+                  person.id !== personToUpdate.id ? person : updatedPerson
+                )
+              );
+              setNewName("");
+              setNewNumber("");
+              displayMessage(`Updated ${personObject.name}`, false);
+            }
           })
           .catch((error) => {
-            setNewName("");
-            setNewNumber("");
-            displayMessage(
-              `${personObject.name} has already been removed from server`,
-              true
-            );
-            // local state mismatch with server, so reload data from server
-            personService
-              .getAll()
-              .then((initialPersons) => setPersons(initialPersons));
+            if (error.response && error.response.status === 404) {
+              displayMessage(
+                `${personObject.name} has already been removed from server`,
+                true
+              );
+              // local state mismatch with server, so reload data from server
+              personService
+                .getAll()
+                .then((initialPersons) => setPersons(initialPersons));
+            } else {
+              displayMessage(error.response.data.error, true);
+            }
           });
       }
     } else {
